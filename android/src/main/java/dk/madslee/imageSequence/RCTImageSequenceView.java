@@ -33,7 +33,7 @@ public class RCTImageSequenceView extends AppCompatImageView {
     private ArrayList<AsyncTask> activeTasks = null;
     private SparseArray<Bitmap> bitmaps = null;
     private RCTResourceDrawableIdHelper resourceDrawableIdHelper;
-    private Boolean animate;
+    private Boolean animate = true;
 
     public RCTImageSequenceView(Context context) {
         super(context);
