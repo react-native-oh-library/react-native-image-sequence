@@ -10,6 +10,10 @@ interface ImageSequenceProps extends ViewProps {
     framesPerSecond?: number;
     /** Should the sequence loop. Default: true */
     loop?: boolean;
+    /** The width to use for optional downsampling. Both `downsampleWidth` and `downsampleHeight` must be set to a positive number to enable downsampling. Default: -1 */
+    downsampleWidth?: number;
+    /** The height to use for optional downsampling. Both `downsampleWidth` and `downsampleHeight` must be set to a positive number to enable downsampling. Default: -1 */
+    downsampleHeight?: number;
 }
 
 declare class ImageSequence extends Component<ImageSequenceProps> {
