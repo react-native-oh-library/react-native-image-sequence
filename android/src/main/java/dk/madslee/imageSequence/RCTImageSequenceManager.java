@@ -58,6 +58,14 @@ public class RCTImageSequenceManager extends SimpleViewManager<RCTImageSequenceV
     }
 
     /**
+    * sets if the animation is currently playing or not
+    */
+    @ReactProp(name = "animate")
+    public void setAnimate(final RCTImageSequenceView view, Boolean animate) {
+        view.setAnimate(animate);
+    }
+
+    /**
      * sets the width for optional downsampling.
      *
      * @param view

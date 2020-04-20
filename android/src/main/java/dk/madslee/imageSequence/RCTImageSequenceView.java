@@ -10,20 +10,20 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.os.AsyncTask;
 import android.os.Handler;
-import android.util.Log;
-import android.widget.ImageView;
+import android.util.SparseArray;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.concurrent.RejectedExecutionException;
+import androidx.appcompat.widget.AppCompatImageView;
 
 
-public class RCTImageSequenceView extends ImageView {
+public class RCTImageSequenceView extends AppCompatImageView {
+    private static final String TAG = RCTImageSequenceView.class.getName();
+
     private final Handler handler = new Handler();
 
     private Integer framesPerSecond = 24;
@@ -31,8 +31,9 @@ public class RCTImageSequenceView extends ImageView {
     private Integer downsampleWidth = -1;
     private Integer downsampleHeight = -1;
     private ArrayList<AsyncTask> activeTasks = null;
-    private HashMap<Integer, Bitmap> bitmaps = null;
+    private SparseArray<Bitmap> bitmaps = null;
     private RCTResourceDrawableIdHelper resourceDrawableIdHelper;
+    private Boolean animate;
 
     public RCTImageSequenceView(Context context) {
         super(context);
@@ -176,7 +177,7 @@ public class RCTImageSequenceView extends ImageView {
         final Runnable r = new Runnable() {
             public void run() {
                 activeTasks = new ArrayList<>(uris.size());
-                bitmaps = new HashMap<>(uris.size());
+                bitmaps = new SparseArray<>(uris.size());
 
                 for (int index = 0; index < uris.size(); index++) {
                     DownloadImageTask task = new DownloadImageTask(index, uris.get(index), getContext());
@@ -185,7 +186,7 @@ public class RCTImageSequenceView extends ImageView {
                     try {
                         task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     } catch (RejectedExecutionException e){
-                        Log.e("react-native-image-sequence", "DownloadImageTask failed" + e.getMessage());
+                        Log.e(TAG, "DownloadImageTask failed" + e.getMessage());
                         break;
                     }
                 }
@@ -195,7 +196,7 @@ public class RCTImageSequenceView extends ImageView {
         // Delay for 1ms to make sure that all the props have been set properly before starting processing
         final boolean added = handler.postDelayed(r, 1);
         if (!added) {
-            Log.e("react-native-image-sequence", "Failed to place Runnable in to the message queue");
+            Log.e(TAG, "Failed to place Runnable in to the message queue");
         }
     }
 
@@ -225,8 +226,22 @@ public class RCTImageSequenceView extends ImageView {
         this.downsampleHeight = downsampleHeight;
     }
 
+    public void setAnimate(Boolean animate) {
+        Drawable drawable = getDrawable();
+        if(drawable instanceof AnimationDrawable){
+            AnimationDrawable animationDrawable = (AnimationDrawable)drawable;
+            if (animate && !animationDrawable.isRunning()) {
+                animationDrawable.start();
+            } else if (!animate && animationDrawable.isRunning()) {
+                animationDrawable.stop();
+                animationDrawable.selectDrawable(0);
+            }
+        }
+        this.animate = animate;
+    }
+
     private boolean isLoaded() {
-        return !isLoading() && bitmaps != null && !bitmaps.isEmpty();
+        return !isLoading() && bitmaps != null && bitmaps.size() > 0;
     }
 
     private boolean isLoading() {
@@ -243,6 +258,8 @@ public class RCTImageSequenceView extends ImageView {
         animationDrawable.setOneShot(!this.loop);
 
         this.setImageDrawable(animationDrawable);
-        animationDrawable.start();
+        if (this.animate) {
+            animationDrawable.start();
+        }
     }
 }

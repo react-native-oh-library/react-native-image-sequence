@@ -17,7 +17,7 @@ public class RCTResourceDrawableIdHelper {
     private Map<String, Integer> mResourceDrawableIdMap;
 
     public RCTResourceDrawableIdHelper() {
-        mResourceDrawableIdMap = new HashMap<String, Integer>();
+        mResourceDrawableIdMap = new HashMap<>();
     }
 
     public int getResourceDrawableId(Context context, @Nullable String name) {
