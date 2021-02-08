@@ -9,8 +9,8 @@ require "json"
   s.author       = "Mads Lee Jensen <madsleejensen@gmail.com>"
   s.homepage     = package["homepage"]
   s.license      = package["license"]
-  s.platform     = :ios, "9.0"
-  s.source       = {:git => "https://github.com/madsleejensen/react-native-image-sequence.git" }
+  s.platform     = :ios, "10.0"
+  s.source       = {:git => "https://github.com/bwindsor/react-native-image-sequence.git" }
   s.source_files  = "ios/RCTImageSequence/*.{h,m}"
   s.dependency "React"
 end

@@ -1,18 +1,20 @@
-# react-native-image-sequence
+# react-native-image-sequence-2
+Based on [react-native-image-sequence](https://github.com/madsleejensen/react-native-image-sequence) with various bugs fixed.
+
 native modules for handling image sequence animations. (created because i had performance issues with a javascript only solution like: https://github.com/remobile/react-native-image-animation)
 
 its a simple wrapper around **iOS** `UIImageView.animationImages` and **Android** `AnimationDrawable`
 
 ## Installation
 
-1. `npm i --save react-native-image-sequence`
-2. `react-native link react-native-image-sequence`
+1. `npm i --save react-native-image-sequence-2`
+2. `cd ios && pod install`
 
 
 ## Examples
 
 ```javascript
-import ImageSequence from 'react-native-image-sequence';
+import ImageSequence from 'react-native-image-sequence-2';
 
 const images = [
   require('1.jpg'),
