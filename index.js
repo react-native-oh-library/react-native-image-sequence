@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import {
-  requireNativeComponent,
-  ViewPropTypes
-} from 'react-native';
+import { requireNativeComponent } from 'react-native';
+import { ViewPropTypes } from 'deprecated-react-native-prop-types';
 import { bool, string, number, array, shape, arrayOf } from 'prop-types';
 import resolveAssetSource from 'react-native/Libraries/Image/resolveAssetSource';
 
