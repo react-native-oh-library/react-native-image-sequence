@@ -8,7 +8,8 @@
   "description": "A <ImageSequence> component for react-native",
   "peerDependencies": {
     "react-native": ">=0.47.0",
-    "prop-types": ">=15.5.0"
+    "prop-types": ">=15.5.0",
+    "deprecated-react-native-prop-types": "^2.3.0"
   },
   "license": "MIT",
   "homepage": "https://github.com/bwindsor/react-native-image-sequence",
