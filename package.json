@@ -1,28 +1,35 @@
 {
   "name": "react-native-image-sequence-2",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/bwindsor/react-native-image-sequence.git"
-  },
-  "version": "0.9.1",
-  "description": "A <ImageSequence> component for react-native",
-  "peerDependencies": {
-    "react-native": ">=0.47.0",
-    "prop-types": ">=15.5.0",
-    "deprecated-react-native-prop-types": "^2.3.0"
-  },
+  "version": "0.9.1-0.0.1",
+  "description": "Showcase a Fabric component with a image sequence",
+  "react-native": "index",
+  "source": "index",
+  "files": [
+    "src",
+    "harmony",
+    "react-native-image-sequence-2.podspec",
+    "!android/build",
+    "!ios/build",
+    "!**/__tests__",
+    "!**/__fixtures__",
+    "!**/__mocks__"
+  ],
+  "keywords": ["react-native", "ios", "android", "harmony"],
+  "repository": "https://github.com/<your_github_handle>/react-native-image-sequence-2",
+  "author": "<Your Name> <your_email@your_provider.com> (https://github.com/<your_github_handle>)",
   "license": "MIT",
-  "homepage": "https://github.com/bwindsor/react-native-image-sequence",
-  "main": "index.js",
-  "types": "typings/index.d.ts",
-  "keywords": [
-    "react-native",
-    "native",
-    "sequence",
-    "imagesequence",
-    "frames",
-    "frame-animation",
-    "animation",
-    "animationImages"
-  ]
+  "bugs": {
+    "url": "https://github.com/<your_github_handle>/react-native-image-sequence-2/issues"
+  },
+  "homepage": "https://github.com/<your_github_handle>/react-native-image-sequence-2#readme",
+  "devDependencies": {},
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*"
+  },
+  "codegenConfig": {
+    "name": "ImageSequenceSpecs",
+    "type": "components",
+    "jsSrcsDir": "src"
+  }
 }
