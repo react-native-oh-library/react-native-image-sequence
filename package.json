@@ -1,28 +1,37 @@
 {
-  "name": "react-native-image-sequence-2",
+  "name": "@react-native-oh-tpl/react-native-image-sequence-2",
   "version": "0.9.1-0.0.1",
   "description": "Showcase a Fabric component with a image sequence",
   "react-native": "index",
   "source": "index",
+  "main": "lib/commonjs/index",
+  "typings": "lib/typescript/index.d.ts",
   "files": [
     "src",
     "harmony",
     "react-native-image-sequence-2.podspec",
-    "!android/build",
-    "!ios/build",
+    "index.tsx",
     "!**/__tests__",
     "!**/__fixtures__",
     "!**/__mocks__"
   ],
-  "keywords": ["react-native", "ios", "android", "harmony"],
-  "repository": "https://github.com/<your_github_handle>/react-native-image-sequence-2",
-  "author": "<Your Name> <your_email@your_provider.com> (https://github.com/<your_github_handle>)",
+  "scripts": {
+    "bob": "bob build",
+    "prepare": "npm run bob"
+  },
+  "keywords": ["react-native", "harmony"],
+  "repository": "https://github.com/bwindsor/react-native-image-sequence",
+  "author": "bwindsor",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/<your_github_handle>/react-native-image-sequence-2/issues"
+    "url": "https://github.com/bwindsor/react-native-image-sequence/issues"
   },
-  "homepage": "https://github.com/<your_github_handle>/react-native-image-sequence-2#readme",
-  "devDependencies": {},
+  "homepage": "https://github.com/bwindsor/react-native-image-sequence#readme",
+  "devDependencies": {
+    "@types/react": "^18.2.12",
+    "react-native-builder-bob": "^0.20.4",
+    "typescript": "^5.0.4"
+  },
   "peerDependencies": {
     "react": "*",
     "react-native": "*"
@@ -31,5 +40,22 @@
     "name": "ImageSequenceSpecs",
     "type": "components",
     "jsSrcsDir": "src"
+  },
+  "harmony": {
+    "alias": "react-native-image-sequence-2"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module",
+      [
+        "typescript",
+        {
+          "project": "tsconfig.build.json"
+        }
+      ]
+    ]
   }
 }
