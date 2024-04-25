@@ -1,13 +1,14 @@
-import { Descriptor, ComponentBuilderContext, ViewRawrawProps, Tag } from '@rnoh/react-native-openharmony';
+import { Descriptor, ComponentBuilderContext, ViewRawProps, Tag } from '@rnoh/react-native-openharmony';
 import { RNComponentFactory, RNOHContext, RNViewBase } from '@rnoh/react-native-openharmony';
 // import { ImageLoaderTurboModule } from '@rnoh/react-native-openharmony/src/main/ets/RNOHCorePackage/turboModules';
 import image from '@ohos.multimedia.image';
 import  resourceManager  from '@ohos.resourceManager';
 import { BusinessError } from '@ohos.base';
+import { RNC } from '@rnoh/react-native-openharmony/generated/ts'
 
 export const IMAGE_SEQUENCE_TYPE: string = "ImageSequenceView"
 
-export interface ImageSequencerawProps extends ViewRawrawProps {
+export interface ImageSequencerawProps extends ViewRawProps {
   loop: boolean,
   images: Array<string>,
   startFrameIndex: number,
@@ -17,7 +18,7 @@ export interface ImageSequencerawProps extends ViewRawrawProps {
 }
 
 // export type ImageSequenceDescriptor = Descriptor<"ImageSequenceView", ImageSequencerawProps>
-export type ImageSequenceDescriptor = Descriptor<"ImageSequenceView", ViewRawrawProps, [], ImageSequencerawProps>
+// export type ImageSequenceDescriptor = Descriptor<"ImageSequenceView", ViewRawProps, [], ImageSequencerawProps>
 export interface ImageData {
   src: string | Resource,
   width: number
@@ -28,11 +29,14 @@ const resourceMgr: resourceManager.ResourceManager = context.resourceManager;
 
 @Component
 export struct RNImageSequence {
+  public static readonly NAME: string = RNC.ImageSequenceView.NAME;
   ctx!: RNOHContext;
   tag: number = 0;
   @BuilderParam buildCustomComponent: (componentBuilderContext: ComponentBuilderContext) => void;
-  @State descriptor: ImageSequenceDescriptor = {} as ImageSequenceDescriptor;
-  private unregisterDescriptorChangesListener?: () => void = undefined;
+  // @State descriptor: ImageSequenceDescriptor = {} as ImageSequenceDescriptor;
+  // private unregisterDescriptorChangesListener?: () => void = undefined;
+  @State descriptorWrapper: RNC.ImageSequenceView.DescriptorWrapper = {} as RNC.ImageSequenceView.DescriptorWrapper;
+  @State cleanUpCallbacks: (()=>void)[]=[]
   @State ImageList: (Resource | string | PixelMap)[] = [];
   @State duration: number = 0;
   @State timer: number = 0;
@@ -42,15 +46,20 @@ export struct RNImageSequence {
   @State localIndex: number[] = [];
 
   aboutToAppear() {
-    this.descriptor = this.ctx.descriptorRegistry.getDescriptor<ImageSequenceDescriptor>(this.tag);
-    this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
-      (newDescriptor) => {
-        this.descriptor = (newDescriptor as ImageSequenceDescriptor)
-      }
-    )
+    // this.descriptor = this.ctx.descriptorRegistry.getDescriptor<ImageSequenceDescriptor>(this.tag);
+    // this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
+    //   (newDescriptor) => {
+    //     this.descriptor = (newDescriptor as ImageSequenceDescriptor)
+    //   }
+    // )
+    this.onDescriptorWrapperChange(this.ctx.descriptorRegistry.findDescriptorWrapperByTag<RNC.ImageSequenceView.DescriptorWrapper>(this.tag)!)
+    this.cleanUpCallbacks.push(this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
+      (descriptor) => {
+        this.onDescriptorWrapperChange(new RNC.ImageSequenceView.DescriptorWrapper(descriptor))
+      }))
 
-    this.duration = 1000 / this.descriptor.rawProps.framesPerSecond;
-    const sourceList = this.descriptor.rawProps.images;
+    this.duration = 1000 / this.descriptorWrapper.props.framesPerSecond;
+    const sourceList = this.descriptorWrapper.props.images;
     this.ImageList.length = sourceList.length;
 
     sourceList.forEach((item, index)=>{
@@ -61,7 +70,7 @@ export struct RNImageSequence {
         this.finishCount +=1
       }
     })
-    if (this.descriptor.rawProps.loop) {
+    if (this.descriptorWrapper.props.loop) {
       this.num = 0;
       this.timer = setInterval(()=>{
         this.num++;
@@ -73,6 +82,10 @@ export struct RNImageSequence {
       this.num = 0;
       clearInterval(this.timer);
     }
+  }
+
+  private onDescriptorWrapperChange(descriptorWrapper: RNC.ImageSequenceView.DescriptorWrapper) {
+    this.descriptorWrapper = descriptorWrapper
   }
 
   getRawFileContent(img:string, index:number) {
@@ -98,8 +111,8 @@ export struct RNImageSequence {
 
   calculateInSampleSize(width: number, height: number):number {
     let inSampleSize = 1;
-    let reqWidth: number = this.descriptor.rawProps.downsampleWidth;
-    let reqHeight: number = this.descriptor.rawProps.downsampleHeight;
+    let reqWidth: number = this.descriptorWrapper.props.downsampleWidth;
+    let reqHeight: number = this.descriptorWrapper.props.downsampleHeight;
 
     if (height > reqHeight || width > reqWidth) {
       let halfHeight = height / 2;
@@ -133,7 +146,8 @@ export struct RNImageSequence {
     imageSourceApi.release();
   }
   aboutToDisappear() {
-    this.unregisterDescriptorChangesListener?.()
+    // this.unregisterDescriptorChangesListener?.()
+    this.cleanUpCallbacks.forEach(cb => cb())
     clearInterval(this.timer);
     if (this.isLocalResource) {
       this.localIndex.forEach(lIndex => {
@@ -141,6 +155,7 @@ export struct RNImageSequence {
         item.release();
       })
     }
+    this.ImageList.length = 0;
   }
 
   build() {
@@ -148,7 +163,7 @@ export struct RNImageSequence {
       if (this.finishCount === this.ImageList.length) {
         Image(this.ImageList[this.num]).objectFit(ImageFit.Fill).draggable(false).width('100%').height('100%').onComplete(()=>{
           console.log(`加载完成：${new Date().getTime()}`)
-        })
+        }).key('image_sequence')
       }
     }
   }

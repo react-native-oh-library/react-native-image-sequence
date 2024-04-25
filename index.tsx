@@ -1,6 +1,20 @@
 import { forwardRef, memo } from 'react';
 import { View, Image } from 'react-native';
 import ImagesequenceView, { NativeProps } from './src/ImageSequenceNativeComponent'
+
+interface ImageProps {
+  images: any[],
+  startFrameIndex?: number,
+  framesPerSecond?: number,
+  loop?: boolean,
+  downsampleWidth?: number,
+  downsampleHeight?: number,
+  style?:{
+    width?: number,
+    height?: number
+  }
+}
+
 function ImageSequenceBase({
   images,
   startFrameIndex,
@@ -11,7 +25,7 @@ function ImageSequenceBase({
   forwardRef,
   style,
   ...props
-}: NativeProps & { forwardRef: React.Ref<any> }) {
+}: ImageProps & { forwardRef: React.Ref<any> }) {
   let images2: any[] = [];
   images.forEach(item => {
     if (item.uri) {
