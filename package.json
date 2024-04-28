@@ -10,6 +10,7 @@
   "files": [
     "src",
     "harmony",
+    "lib",
     "react-native-image-sequence-2.podspec",
     "index.tsx",
     "!**/__tests__",
