@@ -29,10 +29,10 @@ function ImageSequenceBase({
   let images2: any[] = [];
   images.forEach(item => {
     if (item.uri) {
-      images2.push(item);
+      images2.push(item.uri);
     } else {
       let resolvedSource = Image.resolveAssetSource(item);
-      images.push(resolvedSource.uri);
+      images2.push(resolvedSource.uri);
     }
   })
   if (startFrameIndex !== 0) {
