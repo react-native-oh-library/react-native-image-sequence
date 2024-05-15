@@ -1,6 +1,6 @@
 import { RNPackage } from '@rnoh/react-native-openharmony/ts';
 import type {DescriptorWrapperFactoryByDescriptorTypeCtx, DescriptorWrapperFactoryByDescriptorType} from '@rnoh/react-native-openharmony/ts';
-import { RNC } from '@rnoh/react-native-openharmony/generated/ts'
+import { RNC } from '@rnoh/react-native-openharmony/generated'
 
 export class ImageSequencePackage extends RNPackage {
   createDescriptorWrapperFactoryByDescriptorType(ctx:
