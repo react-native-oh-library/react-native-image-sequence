@@ -4,7 +4,7 @@ import { RNComponentFactory, RNOHContext, RNViewBase } from '@rnoh/react-native-
 import image from '@ohos.multimedia.image';
 import  resourceManager  from '@ohos.resourceManager';
 import { BusinessError } from '@ohos.base';
-import { RNC } from '@rnoh/react-native-openharmony/generated/ts'
+import { RNC } from '@rnoh/react-native-openharmony/generated'
 
 export const IMAGE_SEQUENCE_TYPE: string = "ImageSequenceView"
 
@@ -113,11 +113,9 @@ export struct RNImageSequence {
     let inSampleSize = 1;
     let reqWidth: number = this.descriptorWrapper.props.downsampleWidth;
     let reqHeight: number = this.descriptorWrapper.props.downsampleHeight;
-
-	if (reqHeight <= 0 || reqWidth <= 0) {
-	  return inSampleSize;
-	}
-
+    if (width<=0 || height<=0) {
+      return inSampleSize;
+    }
     if (height > reqHeight || width > reqWidth) {
       let halfHeight = height / 2;
       let halWidth = width/ 2;
