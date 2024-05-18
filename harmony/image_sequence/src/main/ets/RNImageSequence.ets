@@ -113,7 +113,7 @@ export struct RNImageSequence {
     let inSampleSize = 1;
     let reqWidth: number = this.descriptorWrapper.props.downsampleWidth;
     let reqHeight: number = this.descriptorWrapper.props.downsampleHeight;
-    if (width<=0 || height<=0) {
+    if (reqWidth <= 0 || reqHeight <= 0) {
       return inSampleSize;
     }
     if (height > reqHeight || width > reqWidth) {
