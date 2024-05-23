@@ -17,8 +17,6 @@ export interface ImageSequencerawProps extends ViewRawProps {
   downsampleHeight: number
 }
 
-// export type ImageSequenceDescriptor = Descriptor<"ImageSequenceView", ImageSequencerawProps>
-// export type ImageSequenceDescriptor = Descriptor<"ImageSequenceView", ViewRawProps, [], ImageSequencerawProps>
 export interface ImageData {
   src: string | Resource,
   width: number
@@ -33,8 +31,6 @@ export struct RNImageSequence {
   ctx!: RNOHContext;
   tag: number = 0;
   @BuilderParam buildCustomComponent: (componentBuilderContext: ComponentBuilderContext) => void;
-  // @State descriptor: ImageSequenceDescriptor = {} as ImageSequenceDescriptor;
-  // private unregisterDescriptorChangesListener?: () => void = undefined;
   @State descriptorWrapper: RNC.ImageSequenceView.DescriptorWrapper = {} as RNC.ImageSequenceView.DescriptorWrapper;
   @State cleanUpCallbacks: (()=>void)[]=[]
   @State ImageList: (Resource | string | PixelMap)[] = [];
@@ -46,12 +42,6 @@ export struct RNImageSequence {
   @State localIndex: number[] = [];
 
   aboutToAppear() {
-    // this.descriptor = this.ctx.descriptorRegistry.getDescriptor<ImageSequenceDescriptor>(this.tag);
-    // this.unregisterDescriptorChangesListener = this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
-    //   (newDescriptor) => {
-    //     this.descriptor = (newDescriptor as ImageSequenceDescriptor)
-    //   }
-    // )
     this.onDescriptorWrapperChange(this.ctx.descriptorRegistry.findDescriptorWrapperByTag<RNC.ImageSequenceView.DescriptorWrapper>(this.tag)!)
     this.cleanUpCallbacks.push(this.ctx.descriptorRegistry.subscribeToDescriptorChanges(this.tag,
       (descriptor) => {
@@ -59,10 +49,10 @@ export struct RNImageSequence {
       }))
 
     this.duration = 1000 / this.descriptorWrapper.props.framesPerSecond;
-    const sourceList = this.descriptorWrapper.props.images;
+    const sourceList: string[] = this.descriptorWrapper.props.images;
     this.ImageList.length = sourceList.length;
 
-    sourceList.forEach((item, index)=>{
+    sourceList.forEach((item: string, index: number)=>{
       if (item.startsWith("asset://")) {
         this.getRawFileContent(item.replace("asset://", "assets/"), index)
       } else {
@@ -88,16 +78,16 @@ export struct RNImageSequence {
     this.descriptorWrapper = descriptorWrapper
   }
 
-  getRawFileContent(img:string, index:number) {
+  getRawFileContent(img:string, index:number): void {
     resourceMgr.getRawFileContent(img).then((fileData: Uint8Array) => {
-      const buffer = fileData.buffer.slice(0);
+      const buffer: ArrayBuffer = fileData.buffer.slice(0);
       this.imageEdit(buffer, index);
     }).catch((err: BusinessError) => {
       console.error(`getRawFileContent failed: ${err.code}`)
     })
   }
 
-  getSource(source:string) {
+  getSource(source: string) {
     if (source.startsWith("asset://")) {
       return $rawfile(source.replace("asset://", "assets/"))
     }
@@ -109,16 +99,16 @@ export struct RNImageSequence {
     return source;
   }
 
-  calculateInSampleSize(width: number, height: number):number {
-    let inSampleSize = 1;
+  calculateInSampleSize(width: number, height: number): number {
+    let inSampleSize: number = 1;
     let reqWidth: number = this.descriptorWrapper.props.downsampleWidth;
     let reqHeight: number = this.descriptorWrapper.props.downsampleHeight;
     if (reqWidth <= 0 || reqHeight <= 0) {
       return inSampleSize;
     }
     if (height > reqHeight || width > reqWidth) {
-      let halfHeight = height / 2;
-      let halWidth = width/ 2;
+      let halfHeight: number = height / 2;
+      let halWidth: number = width/ 2;
       while ((halfHeight / inSampleSize) >= reqHeight && (halWidth / inSampleSize) >= reqWidth) {
         inSampleSize *= 2;
       }
@@ -128,11 +118,11 @@ export struct RNImageSequence {
 
   async imageEdit(imageData:ArrayBuffer, index:number) {
     let imageSourceApi:image.ImageSource = image.createImageSource(imageData);
-    let pixelMap = await imageSourceApi.createPixelMap();
-    const imageInfo = await pixelMap.getImageInfo();
-    const width = imageInfo.size.width;
-    const height = imageInfo.size.height;
-    const sampleSize = this.calculateInSampleSize(width, height);
+    let pixelMap: image.PixelMap = await imageSourceApi.createPixelMap();
+    const imageInfo: image.ImageInfo = await pixelMap.getImageInfo();
+    const width: number = imageInfo.size.width;
+    const height: number = imageInfo.size.height;
+    const sampleSize: number = this.calculateInSampleSize(width, height);
     const decodeOptions:image.DecodingOptions = {
       desiredSize: {
         width: width / sampleSize,
@@ -148,11 +138,10 @@ export struct RNImageSequence {
     imageSourceApi.release();
   }
   aboutToDisappear() {
-    // this.unregisterDescriptorChangesListener?.()
     this.cleanUpCallbacks.forEach(cb => cb())
     clearInterval(this.timer);
     if (this.isLocalResource) {
-      this.localIndex.forEach(lIndex => {
+      this.localIndex.forEach((lIndex: number) => {
         const item: PixelMap = this.ImageList[lIndex] as PixelMap;
         item.release();
       })
