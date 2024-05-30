@@ -1,19 +1,6 @@
 import { forwardRef, memo } from 'react';
 import { View, Image } from 'react-native';
-import ImagesequenceView, { NativeProps } from './src/ImageSequenceNativeComponent'
-
-interface ImageProps {
-  images: any[],
-  startFrameIndex?: number,
-  framesPerSecond?: number,
-  loop?: boolean,
-  downsampleWidth?: number,
-  downsampleHeight?: number,
-  style?:{
-    width?: number,
-    height?: number
-  }
-}
+import ImagesequenceView from './src/ImageSequenceNativeComponent'
 
 function ImageSequenceBase({
   images,
@@ -23,10 +10,9 @@ function ImageSequenceBase({
   downsampleHeight,
   downsampleWidth,
   forwardRef,
-  style,
   ...props
-}: ImageProps & { forwardRef: React.Ref<any> }) {
-  let images2: any[] = [];
+}) {
+  let images2 = [];
   images.forEach(item => {
     if (item.uri) {
       images2.push(item.uri);
@@ -48,7 +34,6 @@ function ImageSequenceBase({
         downsampleWidth={downsampleWidth}
         downsampleHeight={downsampleHeight}
         images={images2}
-        style={style}
       />
     </View>
   )
@@ -56,11 +41,11 @@ function ImageSequenceBase({
 
 const ImageSequenceMemo = memo(ImageSequenceBase)
 
-const ImageSequenceComponent: React.ComponentType<NativeProps> = forwardRef(
-  (props: NativeProps, ref: React.Ref<any>) => (
+const ImageSequenceComponent = forwardRef(
+  (props, ref) => (
     <ImageSequenceMemo forwardRef={ref} {...props} />
   ),
 )
 ImageSequenceComponent.displayName = 'ImageSequence';
-const ImageSequence: React.ComponentType<NativeProps> = ImageSequenceComponent as any;
+const ImageSequence = ImageSequenceComponent;
 export default ImageSequence;
