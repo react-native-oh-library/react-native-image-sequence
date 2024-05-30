@@ -31,8 +31,7 @@ export interface NativeProps extends ViewProps {
     /** The width to use for optional downsampling. Both `downsampleWidth` and `downsampleHeight` must be set to a positive number to enable downsampling. Default: -1 */
     downsampleWidth?: Int32;
     /** The height to use for optional downsampling. Both `downsampleWidth` and `downsampleHeight` must be set to a positive number to enable downsampling. Default: -1 */
-    downsampleHeight?: Int32;
-    style?: {width?: Int32, height?: Int32};
+    downsampleHeight?: Int32
 }
 
 export default codegenNativeComponent<NativeProps>(
