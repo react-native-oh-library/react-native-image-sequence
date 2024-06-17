@@ -13,7 +13,7 @@ export interface ImageSequencerawProps extends ViewRawProps {
   loop: boolean,
   images: Array<string>,
   startFrameIndex: number,
-  framesPerSecond: number,e
+  framesPerSecond: number,
   downsampleWidth: number,
   downsampleHeight: number
 }
