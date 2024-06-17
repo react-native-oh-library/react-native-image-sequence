@@ -5,6 +5,7 @@ import image from '@ohos.multimedia.image';
 import  resourceManager  from '@ohos.resourceManager';
 import { BusinessError } from '@ohos.base';
 import { RNC } from '@rnoh/react-native-openharmony/generated'
+import Logger from './Logger';
 
 export const IMAGE_SEQUENCE_TYPE: string = "ImageSequenceView"
 
@@ -22,6 +23,7 @@ export interface ImageData {
   width: number
 }
 
+const TAG: string = "[RNOH] RNImageSequence"
 const context: Context = getContext(this);
 const resourceMgr: resourceManager.ResourceManager = context.resourceManager;
 
@@ -83,7 +85,7 @@ export struct RNImageSequence {
       const buffer: ArrayBuffer = fileData.buffer.slice(0);
       this.imageEdit(buffer, index);
     }).catch((err: BusinessError) => {
-      console.error(`getRawFileContent failed: ${err.code}`)
+      Logger.error(TAG, `getRawFileContent failed: ${err.code}`);
     })
   }
 
@@ -153,7 +155,7 @@ export struct RNImageSequence {
     RNViewBase({ctx: this.ctx, tag: this.tag}) {
       if (this.finishCount === this.ImageList.length) {
         Image(this.ImageList[this.num]).objectFit(ImageFit.Fill).draggable(false).width('100%').height('100%').onComplete(()=>{
-          console.log(`加载完成：${new Date().getTime()}`)
+          Logger.debug(TAG, `加载完成：${new Date().getTime()}`);
         }).key('image_sequence')
       }
     }
