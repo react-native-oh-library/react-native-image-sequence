@@ -1,74 +1,13 @@
-# react-native-image-sequence-2
-Based on [react-native-image-sequence](https://github.com/madsleejensen/react-native-image-sequence) with various bugs fixed.
+#  迁移声明
 
-native modules for handling image sequence animations. (created because i had performance issues with a javascript only solution like: https://github.com/remobile/react-native-image-animation)
+- 本仓库已迁移至 Gitee：[OpenHarmony-SIG/rntpc_react-native-image-sequence](https://gitee.com/openharmony-sig/rntpc_react-native-image-sequence)。
+- 包名已更改为 `@react-native-ohos/react-native-image-sequence-2`，支持直接从 npm 下载。
+- 更多详情请查阅新仓库的 README 文件。
+- 本仓库旧版本的文档已归档：[链接](/doc/zh-cn.md)
 
-its a simple wrapper around **iOS** `UIImageView.animationImages` and **Android** `AnimationDrawable`
+# Migration Announcement
 
-## Installation
-
-1. `npm i --save react-native-image-sequence-2`
-2. `cd ios && pod install`
-
-
-## Examples
-
-```javascript
-import ImageSequence from 'react-native-image-sequence-2';
-
-const images = [
-  require('1.jpg'),
-  require('2.jpg'),
-  require('3.jpg'),
-  require('4.jpg'),
-  require('5.jpg'),
-];
-
-const centerIndex = Math.round(images.length / 2);
-
-<ImageSequence
-  images={images}
-  startFrameIndex={centerIndex}
-  style={{width: 50, height: 50}}
-/>
-```
-
-### Change animation speed
-You can change the speed of the animation by setting the `framesPerSecond` property.
-
-```javascript
-<ImageSequence
-  images={images}
-  framesPerSecond={24}
-/>
-```
-
-### Looping
-You can change if animation loops indefinitely by setting the `loop` property.
-
-```javascript
-<ImageSequence
-  images={images}
-  framesPerSecond={24}
-  loop={false}
-/>
-```
-
-### Downsampling
-Loading and using an image with a higher resolution than the size of the image display area does not provide any visible benefit, but still takes up precious memory and incurs additional performance overhead due to additional on the fly scaling. So choosing to downsample an image before rendering saves memory and CPU time during the rendering process, but costs more CPU time during the image loading process.
-
-You can set the images to be downsampled by setting both the `downsampleWidth` and `downsampleHeight` properties. Both properties must be set to positive numbers to enable downsampling.
-
-```javascript
-<ImageSequence
-  images={images}
-  downsampleWidth={32}
-  downsampleHeight={32}
-/>
-```
-
-IMPORTANT: The final image width and height will not necessarily match `downsampleWidth` and `downsampleHeight` but will just be a target for the per-platform logic on how to downsample.
-
-On Android, the logic for how to downsample is taken from [here](https://developer.android.com/topic/performance/graphics/load-bitmap). The image's aspect ratio will stay consistent after downsampling.
-
-On iOS, the max value of `downsampleWidth` and `downsampleHeight` will be used as the max pixel count for both dimensions in the final image. The image's aspect ratio will stay consistent after downsampling.
+- This repository has been migrated to Gitee: [OpenHarmony-SIG/rntpc_react-native-image-sequence](https://gitee.com/openharmony-sig/rntpc_react-native-image-sequence)
+- The package name has been changed to `@react-native-ohos/react-native-image-sequence-2` and is now available for direct download from npm.
+- For more details, please refer to the README in the new repository.
+- Archived documentation for versions in this repository can be found here: [Link](/doc/en.md)
